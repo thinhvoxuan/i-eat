@@ -7,4 +7,3 @@ services:
     volumes:
       - .:/go/src/go-with-compose
     working_dir: /go/src/go-with-compose
-    command: realize start
