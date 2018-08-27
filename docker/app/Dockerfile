@@ -1,0 +1,2 @@
+FROM golang:1.9
+RUN go get github.com/oxequa/realize github.com/golang/dep/cmd/dep
