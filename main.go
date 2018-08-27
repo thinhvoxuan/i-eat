@@ -23,6 +23,15 @@ func main() {
 		response.Reply(fmt.Sprintf("Add %d", number))
 	})
 
+	bot.DefaultCommand(func(request slacker.Request, response slacker.ResponseWriter) {
+		// bot.defaultHelp
+		response.Reply("type `help @Cereals`")
+	})
+
+	bot.Command("Wifi", "Password", func(request slacker.Request, response slacker.ResponseWriter) {
+		response.Reply("123444222")
+	})
+
 	bot.Command("Remove <number>", "Remove food", func(request slacker.Request, response slacker.ResponseWriter) {
 		number := request.IntegerParam("number", 1)
 		response.Reply(fmt.Sprintf("Remove %d", number))
