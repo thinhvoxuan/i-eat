@@ -6,13 +6,32 @@ import (
 	"log"
 	"os"
 
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+
 	"github.com/joho/godotenv"
 	"github.com/shomali11/slacker"
 )
 
+type Product struct {
+	gorm.Model
+	Code  string
+	Price uint
+}
+
 func main() {
 	godotenv.Load()
 	bot := slacker.NewClient(os.Getenv("TOKEN"))
+
+	db, err := gorm.Open("postgres", "host=db user=postgres dbname=cereals password=example sslmode=disable")
+	defer db.Close()
+	if err != nil {
+		log.Println("Error-Connect-DB")
+		log.Fatal(err)
+	}
+
+	db.AutoMigrate(&Product{})
+	db.Create(&Product{Code: "New Product", Price: 1000})
 
 	bot.Command("Menu", "List of good today", func(request slacker.Request, response slacker.ResponseWriter) {
 		response.Reply("List of good today")
@@ -45,11 +64,13 @@ func main() {
 		response.Reply("Review your food")
 	})
 
+	log.Println("Complete loading")
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	err := bot.Listen(ctx)
-	if err != nil {
+	errListen := bot.Listen(ctx)
+	if errListen != nil {
 		log.Fatal(err)
 	}
+
 }

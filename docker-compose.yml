@@ -6,4 +6,24 @@ services:
       context: ./docker/app
     volumes:
       - .:/go/src/go-with-compose
+    depends_on:
+      - db
+    links:
+      - db
     working_dir: /go/src/go-with-compose
+    
+  db:
+    image: postgres
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql
+    env_file:
+      - ./docker/app/variables.env
+
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 31001:8080
