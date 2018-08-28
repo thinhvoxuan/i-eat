@@ -13,10 +13,27 @@ import (
 	"github.com/shomali11/slacker"
 )
 
-type Product struct {
+type MenuItem struct {
 	gorm.Model
-	Code  string
-	Price uint
+	FoodName string
+	Price    uint
+	ForDate  uint
+}
+
+type Geeker struct {
+	gorm.Model
+	Alias     string
+	SlackID   string
+	SlackName string
+}
+
+type Receipt struct {
+	gorm.Model
+	Geeker     Geeker `gorm:"foreignkey:GeekerId"`
+	GeekerID   uint
+	MenuItem   MenuItem `gorm:"foreignkey:MenuItemId"`
+	MenuItemID uint
+	ForDate    uint
 }
 
 func main() {
@@ -30,10 +47,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db.AutoMigrate(&Product{})
-	db.Create(&Product{Code: "New Product", Price: 1000})
+	// db.AutoMigrate(&MenuItem{}, &Geeker{}, &Receipt{})
+	// db.Create(&Product{Code: "New Product", Price: 1000})
 
-	bot.Command("Menu", "List of good today", func(request slacker.Request, response slacker.ResponseWriter) {
+	bot.Command("Menu2", "List of good today", func(request slacker.Request, response slacker.ResponseWriter) {
 		response.Reply("List of good today")
 	})
 

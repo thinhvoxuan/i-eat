@@ -5,7 +5,7 @@ services:
     build: 
       context: ./docker/app
     volumes:
-      - .:/go/src/go-with-compose
+      - ./slack-bot:/go/src/go-with-compose
     depends_on:
       - db
     links:
@@ -16,6 +16,7 @@ services:
     image: postgres
     volumes:
       - ./data/postgresql:/var/lib/postgresql
+      - ./data/postgresql/data:/var/lib/postgresql/data
     env_file:
       - ./docker/app/variables.env
 
